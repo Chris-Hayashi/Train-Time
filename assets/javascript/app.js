@@ -19,14 +19,30 @@ var database = firebase.database();
 //Create a child_added function for the database
 database.ref().on("child_added", function(childSnapshot) {
 
+    //convert the firstTime to moment.js format
+    var firstTimeConverted = moment(childSnapshot.val().firstTrain, "HH:mm").subtract(1, "years");
+
+    //find the time difference in minutes
+    var timeDifference = moment().diff(moment(firstTimeConverted), "minutes");
+
+    //find the remainder between timeDifference and frequency
+    var timeRemainder = timeDifference % childSnapshot.val().frequency;
+
+    //find the minutes until the next train arrives
+    var minutesTillTrain = childSnapshot.val().frequency - timeRemainder;
+
+    //find the time arrival of the next train
+    var nextTrain = moment(moment().add(minutesTillTrain, "minutes")).format("HH:mm");
+
     //create a new table row
     var tableRow = $("<tr>");
 
     //append a new table head
     tableRow.append($("<th>").append(childSnapshot.val().name));
     tableRow.append($("<th>").append(childSnapshot.val().destination));
-    tableRow.append($("<th>").append(childSnapshot.val().time));
     tableRow.append($("<th>").append(childSnapshot.val().frequency));
+    tableRow.append($("<th>").append(nextTrain));
+    tableRow.append($("<th>").append(minutesTillTrain));
 
     //append the table tow to the html
     $("#trains").append(tableRow);
@@ -38,16 +54,32 @@ $("#submit").on("click", function(event) {
     //Prevent the submit button from reloading the page
     event.preventDefault();
 
+    // //convert the firstTime to moment.js format
+    // var firstTimeConverted = moment($("#first-train-time").val().trim(), "HH:mm").subtract(1, "years");
+
+    // //find the time difference in minutes
+    // var timeDifference = moment().diff(moment(firstTimeConverted), "minutes");
+
+    // //find the remainder between timeDifference and frequency
+    // var timeRemainder = timeDifference % $("#train-frequency").val().trim();
+
+    // //find the minutes until the next train arrives
+    // var minutesTillTrain =$("#train-frequency").val().trim() - timeRemainder;
+
+    // //find the time arrival of the next train
+    // var nextTrain = moment(moment().add(minutesTillTrain, "minutes")).format("HH:mm");
+
     //create a variable named newTrain that stores an object of data input from the user
     var newTrain = {
         name: $("#train-name").val().trim(),
         destination: $("#train-destination").val().trim(),
-        time: $("#train-time").val().trim(),
-        frequency: $("#train-frequency").val().trim()
-    }
+        frequency: $("#train-frequency").val().trim(),
+        firstTrain: $("#first-train-time").val().trim()
+    };
 
     //push newTrain up to the database
     database.ref().push(newTrain);
+
+    console.log("Minutes Until Next Train: " + minutesTillTrain);
+    console.log("Next Arrival: " + nextTrain);
 });
-
-
