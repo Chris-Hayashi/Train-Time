@@ -11,15 +11,43 @@ const firebaseConfig = {
   };
 
 //initialize firebase
-firebaseConfig.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 //Get a reference to the database service
 var database = firebase.database();
 
-//Create a "value" function for the database
-database.ref().on("value", function(snapshot) {
+//Create a child_added function for the database
+database.ref().on("child_added", function(childSnapshot) {
 
+    //create a new table row
+    var tableRow = $("<tr>");
 
+    //append a new table head
+    tableRow.append($("<th>").append(childSnapshot.val().name));
+    tableRow.append($("<th>").append(childSnapshot.val().destination));
+    tableRow.append($("<th>").append(childSnapshot.val().time));
+    tableRow.append($("<th>").append(childSnapshot.val().frequency));
 
-
+    //append the table tow to the html
+    $("#trains").append(tableRow);
 });
+
+//Create an onClick function for the submit button
+$("#submit").on("click", function(event) {
+
+    //Prevent the submit button from reloading the page
+    event.preventDefault();
+
+    //create a variable named newTrain that stores an object of data input from the user
+    var newTrain = {
+        name: $("#train-name").val().trim(),
+        destination: $("#train-destination").val().trim(),
+        time: $("#train-time").val().trim(),
+        frequency: $("#train-frequency").val().trim()
+    }
+
+    //push newTrain up to the database
+    database.ref().push(newTrain);
+});
+
+
