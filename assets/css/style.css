@@ -1,5 +1,5 @@
 body {
-    background: url(../images/train.png) no-repeat center center fixed;
+    background: url(../images/wood.png) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -8,9 +8,36 @@ body {
 
 h1 {
     color: white;
+    position: relative;
+    text-align: center;
 }
 
-table {
-    align: center;
-    width: 60%;
+h2 {
+    color: white;
+}
+#thead-header{
+    text-align: right;
+    left: 10%;
+}
+
+div {
+    /* position: absolute; */
+    /* width: 700px; */
+    /* display: inline-block; */
+}
+
+#train-table {
+    float: right;
+    /* display: table; */
+    border-collapse: collapse;
+    /* overflow-x: auto; */
+    width: 70%;
+    /* margin: 0 auto; */
+}
+
+form {
+    color: white;
+    float: left;
+    align-content: center;
+    margin: auto;
 }
