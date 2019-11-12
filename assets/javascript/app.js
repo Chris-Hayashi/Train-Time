@@ -54,7 +54,7 @@ $("#submit").on("click", function(event) {
     //Prevent the submit button from reloading the page
     event.preventDefault();
 
-    if ($("#addTrain input").val() != null) {
+    if ($("#train-name, #train-destination, #train-frequency, #first-train-time").val() != '') {
 
         //create a variable named newTrain that stores an object of data input from the user
         var newTrain = {
@@ -70,5 +70,5 @@ $("#submit").on("click", function(event) {
         
     }
     //clear input values
-    $("#train-name, #train-destination, #train-frequency, #first-train-time").val('');
+    $("#train-name, #train-destination, #train-frequency, #first-train-time").removeAttr('value');
 });
